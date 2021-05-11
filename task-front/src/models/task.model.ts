@@ -19,4 +19,5 @@ export interface TaskI {
   id: string;
   name: string;
   state: boolean;
+  projectId?: string
 }

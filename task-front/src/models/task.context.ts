@@ -1,4 +1,4 @@
-import { ProjectI } from "./task.model";
+import { ProjectI, TaskI } from "./task.model";
 
 export interface ContextProjectI {
   form: boolean;
@@ -11,6 +11,20 @@ export interface ContextProjectI {
   showErrorFn(): void;
   currentProjectFn(projectId: string): void;
   deleteProjectFn(projectId: string): void;
+}
+
+export interface ContextTaskI {
+  tasks: TaskI[];
+  projectTasks: TaskI[];
+  errorTask: boolean;
+  taskSelected: TaskI;
+  getTaskByProjectFn(id: string): void;
+  addNewTaskFn(task: TaskI): void;
+  showErrorTaskFn(): void;
+  deleteTaskFn(taskId: string): void;
+  changeTaskStateFn(task: TaskI): void;
+  selectTaskFn(task: TaskI): void;
+  updateTaskFn(task: TaskI): void;
 }
 
 export interface PropsInitState {

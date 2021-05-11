@@ -16,9 +16,9 @@ import { ContextProjectI, PropsInitState } from "../../models/task.context";
 //UPPERCASSE
 const ProjectState = (props: any) => {
   const projects = [
-    { id: "TA", name: "Virtual Store" },
-    { id: "TB", name: "Web Design" },
-    { id: "TC", name: "Homework" },
+    { id: "P001", name: "Virtual Store" },
+    { id: "P002", name: "Web Design" },
+    { id: "P003", name: "Homework" },
   ];
 
   const initialState: ContextProjectI = {
