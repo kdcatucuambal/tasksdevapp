@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { URLDB } from './app.database';
 import { ProjectModule } from './models/project/project.module';
+import { TaskModule } from './models/task/task.module';
 @Module({
-  imports: [MongooseModule.forRoot(URLDB), ProjectModule],
+  imports: [MongooseModule.forRoot(URLDB), ProjectModule, TaskModule],
   controllers: [AppController],
   providers: [AppService],
 })

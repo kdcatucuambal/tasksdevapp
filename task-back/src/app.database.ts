@@ -1,2 +1,1 @@
-export const URLDB =
-  'mongodb+srv://kevinmongo:catucuamba777@cluster0.sgzzh.mongodb.net/merntasks';
+export const URLDB = 'mongodb+srv://kevdev:catucuamba777@cluster0.7vxbv.mongodb.net/tasks?retryWrites=true&w=majority';
