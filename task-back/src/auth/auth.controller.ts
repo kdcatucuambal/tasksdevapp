@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 
@@ -9,8 +9,17 @@ export class AuthController {
 
     }
 
+    /**
+     * 
+     * @param login: User credentials
+     * @returns token for the user
+     */
     @Post("login")
     async login(@Body() login: LoginDto) {
-        return await this.authService.login(login);
+        try {
+            return await this.authService.login(login);
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_REQUEST);
+        }
     }
 }

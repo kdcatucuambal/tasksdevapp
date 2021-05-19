@@ -1,19 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from 'src/models/user/schemas/user.schema';
-import { UserService } from 'src/models/user/user.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'src/models/user/user.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './auth.strategy';
 
 @Module({
   imports: [UserModule, JwtModule.register({
     secret: "secret", signOptions: {
       expiresIn: "1h"
     }
-  })],
-  providers: [AuthService],
+  }), PassportModule],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService, JwtModule]
 })

@@ -1,13 +1,29 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  Request
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Auth } from 'src/auth/auth.decorator';
+
 import { CreateProjectDto } from './dtos/project.dto';
 import { ProjectService } from './project.service';
 
 @Controller('projects')
 export class ProjectController {
+
   constructor(private projectService: ProjectService) { }
 
   @Get()
-  async getProjects() {
+  @UseGuards(AuthGuard('jwt'))
+  async getProjects(@Auth() user: any) {
+    console.log('id user from decorator: ' + user);
     const projects = await this.projectService.findAll();
     return projects;
   }
