@@ -13,7 +13,7 @@ export class ProjectController {
   }
 
   @Get(':id')
-  async getProjecyById(@Param("id") id: string) {
+  async getProjectyById(@Param("id") id: string) {
     const project = await this.projectService.findById(id);
     return project;
   }
