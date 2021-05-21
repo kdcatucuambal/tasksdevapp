@@ -6,11 +6,11 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
-  Request
+  UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Auth } from 'src/auth/auth.decorator';
+import { User } from '../user/schemas/user.schema';
 
 import { CreateProjectDto } from './dtos/project.dto';
 import { ProjectService } from './project.service';
@@ -22,20 +22,23 @@ export class ProjectController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  async getProjects(@Auth() user: any) {
-    console.log('id user from decorator: ' + user);
-    const projects = await this.projectService.findAll();
+  async getProjects(@Auth() userId: string) {
+    const projects = await this.projectService.findAll(userId);
     return projects;
   }
 
   @Get(':id')
   async getProjectyById(@Param("id") id: string) {
     const project = await this.projectService.findById(id);
+  
+  
+    
     return project;
   }
 
   @Post()
   async create(@Body() project: CreateProjectDto) {
+    
     const projectCreated = await this.projectService.create(project);
     return projectCreated;
   }
