@@ -1,21 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
-export type ProjectDocument = Task & Document;
+export type TaskDocument = Task & Document;
 
 @Schema()
 export class Task {
 
     _id: string;
 
-    @Prop()
+    @Prop({ required: true, trim: true })
     name: string;
 
-    @Prop()
+    @Prop({ required: true, default: false })
     state: boolean;
 
-    //To do relations
+    @Prop({ default: Date })
+    createdAt: Date;
+
+    @Prop({ required: true, type: Types.ObjectId, ref: 'Project' })
+    project: Types.ObjectId;
 
 }
 
-export const ProjectSchema = SchemaFactory.createForClass(Task);
+export const TaskSchema = SchemaFactory.createForClass(Task);

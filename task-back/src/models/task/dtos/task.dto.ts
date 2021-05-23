@@ -1,5 +1,4 @@
-export class CreateTaskto {
-    readonly name: string;
-    readonly state: boolean;
-  }
-  
+export class CreateTaskDto {
+  readonly name: string;
+  readonly project: string;
+}

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-// import { Document, Schema as SchemaR } from 'mongoose';
+import { Document, Schema as SchemaR, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
-import { User } from "./../../user/schemas/user.schema";
+
 
 export type ProjectDocument = Project & mongoose.Document;
 
@@ -14,7 +14,7 @@ export class Project {
   name: string;
 
   @Prop({ required: true, type: mongoose.Types.ObjectId, ref: 'User' })
-  user: mongoose.Types.ObjectId
+  user: Types.ObjectId;
 
   @Prop({ default: Date })
   createdAt: Date;

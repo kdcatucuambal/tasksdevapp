@@ -40,6 +40,7 @@ export class ProjectService {
   async findAll(userId: string): Promise<Project[]> {
     const user = mongoose.Types.ObjectId(userId);
     // return this.projectModel.find({ user }).populate("user").exec();
+ 
     return this.projectModel.find({ user }).sort({ createdAt: -1 }).exec();
   }
 
