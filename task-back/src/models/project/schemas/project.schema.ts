@@ -16,6 +16,9 @@ export class Project {
   @Prop({ required: true, type: mongoose.Types.ObjectId, ref: 'User' })
   user: mongoose.Types.ObjectId
 
+  @Prop({ default: Date })
+  createdAt: Date;
+
 }
 
 
