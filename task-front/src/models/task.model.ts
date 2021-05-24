@@ -7,7 +7,13 @@ export interface NewUserI {
   name: string;
   email: string;
   password: string;
-  confirm: string;
+  confirm?: string;
+}
+
+export interface UserLog {
+  user: string;
+  email: string;
+  token: string
 }
 
 export interface ProjectI {

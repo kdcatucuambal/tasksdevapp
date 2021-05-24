@@ -4,7 +4,7 @@ export class UtilTask {
   static arePasswordsValidated = (password: string, confirm: string) => {
     password = password.trim();
     confirm = confirm.trim();
-    if (password === confirm && password.length >= 6) {
+    if (password === confirm && password.length >= 8) {
       return true;
     }
     return false;
@@ -12,10 +12,10 @@ export class UtilTask {
 
   static isFieldsValidated = (user: NewUserI) => {
     if (
-      user.confirm === "" ||
-      user.email === "" ||
-      user.name === "" ||
-      user.password === ""
+      user.confirm.trim() === "" ||
+      user.email.trim() === "" ||
+      user.name.trim() === "" ||
+      user.password.trim() === ""
     ) {
       return false;
     }

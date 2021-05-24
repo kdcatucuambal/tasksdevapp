@@ -22,4 +22,6 @@ export class AuthController {
             throw new HttpException(error, HttpStatus.BAD_REQUEST);
         }
     }
+
+    
 }

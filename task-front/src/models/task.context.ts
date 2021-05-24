@@ -1,4 +1,4 @@
-import { ProjectI, TaskI } from "./task.model";
+import { NewUserI, ProjectI, TaskI } from "./task.model";
 
 export interface ContextProjectI {
   form: boolean;
@@ -25,6 +25,20 @@ export interface ContextTaskI {
   changeTaskStateFn(task: TaskI): void;
   selectTaskFn(task: TaskI): void;
   updateTaskFn(task: TaskI): void;
+}
+
+export interface ContextAlertI {
+  alert: { message: string, category: string },
+  showAlert(message: string, category: string): void
+
+}
+
+export interface ContextAuthI {
+  token: string,
+  authenticated: boolean,
+  user: any,
+  alert: { message: string, category: string },
+  registerUser(newUser: NewUserI): void
 }
 
 export interface PropsInitState {

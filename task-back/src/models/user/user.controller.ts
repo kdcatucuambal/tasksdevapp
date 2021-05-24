@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Auth } from 'src/auth/auth.decorator';
 import { CreateUserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
@@ -15,10 +17,11 @@ export class UserController {
         return users;
     }
 
-    @Get(":id")
-    async getById(@Param("id") id: string) {
+    @Get('logged')
+    @UseGuards(AuthGuard('jwt'))
+    async getById(@Auth() userId: string) {
         try {
-            const userFound = await this.userService.findById(id);
+            const userFound = await this.userService.findById(userId);
             return userFound;
         } catch (error) {
             throw new HttpException('THere is no that user', HttpStatus.BAD_REQUEST);

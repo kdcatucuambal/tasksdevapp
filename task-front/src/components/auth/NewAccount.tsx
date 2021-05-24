@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { NewUserI } from "../../models/task.model";
 import { UtilTask } from "../../util/util.task";
+import AlertContext from "../../context/alerts/alertContext";
+import AuthContext from "../../context/authentication/authContext";
+import authContext from "../../context/authentication/authContext";
 
-const NewAccount = () => {
+const NewAccount = (props) => {
+  //extraxt context values
+  const { alert, showAlert } = useContext(AlertContext);
+
+  const {
+    alert: alertR,
+    authenticated,
+    registerUser,
+  } = useContext(AuthContext);
+  //User registered
+  useEffect(() => {
+    if (authenticated) {
+      props.history.push("/projects");
+    }
+
+    if (alertR) {
+      showAlert(alertR.message, alert.category);
+    }
+
+    
+  }, [alertR, authenticated, props.history]);
+
   const [newUser, setNewUser] = useState<NewUserI>({
     confirm: "",
     email: "",
@@ -16,14 +40,23 @@ const NewAccount = () => {
     e.preventDefault();
 
     //Validate fields
+    if (!UtilTask.isFieldsValidated(newUser)) {
+      showAlert("All fields are required!", "alerta-error");
+      return;
+    }
 
     //Password minium 6 characters and validate
     const validPassword = UtilTask.arePasswordsValidated(
       newUser.password,
       newUser.confirm
     );
+    if (!validPassword) {
+      showAlert("Passwords incorrects", "alerta-error");
+      return;
+    }
 
     //Pass to action
+    registerUser(newUser);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -31,6 +64,9 @@ const NewAccount = () => {
 
   return (
     <div className="form-usuario">
+      {alert ? (
+        <div className={`alerta ${alert.category}`}>{alert.message}</div>
+      ) : null}
       <div className="contenedor-form sombra-dark">
         <h1>Sign Up!</h1>
         <form onSubmit={handleSubmit}>
@@ -62,7 +98,7 @@ const NewAccount = () => {
               type="password"
               id="password"
               name="password"
-              placeholder="Put a password"
+              placeholder="Put a password of 8 characters"
               onChange={handleChange}
               value={newUser.password}
             />

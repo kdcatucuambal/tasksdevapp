@@ -1,17 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, UseGuards } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, GetUserDto } from './dto/user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import { genSaltSync, hashSync } from "bcryptjs";
+import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class UserService {
 
-    constructor(@InjectModel('User') private userModel: Model<UserDocument>) {
-
+    constructor(
+        @InjectModel('User') private userModel: Model<UserDocument>,
+        @Inject(forwardRef(() => AuthService))
+        private authService: AuthService) {
     }
 
-    async create(createUserDto: CreateUserDto): Promise<User> {
+    async create(createUserDto: CreateUserDto): Promise<GetUserDto> {
         const createdUser = new this.userModel(createUserDto);
 
         const password = createdUser.password.trim();
@@ -21,7 +24,16 @@ export class UserService {
 
         const salt = genSaltSync(10);
         createdUser.password = hashSync(password, salt);
-        return createdUser.save();
+        const userSaved = await createdUser.save()
+
+
+
+        const userLogged = await this.authService.login({
+            email: userSaved.email,
+            password: createUserDto.password,
+        });
+
+        return userLogged;
     }
 
     async findAll(): Promise<User[]> {
@@ -32,6 +44,7 @@ export class UserService {
         return this.userModel.findOne({ email }).exec();
     }
 
+    
     async findById(id: string): Promise<User> {
         return this.userModel.findById(id).exec();
     }
