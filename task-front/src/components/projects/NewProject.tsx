@@ -1,21 +1,14 @@
 import React, { Fragment, useState } from "react";
 import { useContext } from "react";
 import projectContext from "../../context/projects/projectContext";
-import { ProjectI } from "../../models/task.model";
 
 const NewProject = () => {
   const projectsContext = useContext(projectContext);
-  const {
-    form,
-    errorForm,
-    showFormFn,
-    addProjectFn,
-    showErrorFn,
-  } = projectsContext;
+  const { form, errorForm, showFormFn, addProjectFn, showErrorFn } =
+    projectsContext;
 
   //State
-  const [project, setProject] = useState<ProjectI>({
-    id: "",
+  const [project, setProject] = useState<{ name: string }>({
     name: "",
   });
 
@@ -35,7 +28,6 @@ const NewProject = () => {
 
     //Reset form
     setProject({
-      id: "",
       name: "",
     });
   };

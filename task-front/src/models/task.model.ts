@@ -17,13 +17,21 @@ export interface UserLog {
 }
 
 export interface ProjectI {
-  id: string;
+  _id: string;
   name: string;
+  user: string;
+  createdAt: string;
 }
 
 export interface TaskI {
-  id: string;
+  _id: string;
   name: string;
   state: boolean;
-  projectId?: string
+  project: string;
+  createdAt: string;
+}
+
+export interface TaskNewI{
+  name: string;
+  project: string;
 }

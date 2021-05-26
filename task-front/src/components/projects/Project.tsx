@@ -13,10 +13,11 @@ const Project = ({ project }: Props) => {
 
   //Get project tasks
   const _taskContext = useContext(taskContext);
-  const { getTaskByProjectFn } = _taskContext;
+  const { getTaskByProjectFn, selectTaskFn } = _taskContext;
   //Function for add project
   const handleSelectProject = (id: string) => {
     currentProjectFn(id);
+    selectTaskFn(null);
     getTaskByProjectFn(id); //Filter tasks
   };
 
@@ -25,7 +26,7 @@ const Project = ({ project }: Props) => {
       <button
         type="button"
         className="btn btn-blank"
-        onClick={() => handleSelectProject(project.id)}
+        onClick={() => handleSelectProject(project._id)}
       >
         {project.name}
       </button>

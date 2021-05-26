@@ -1,4 +1,4 @@
-import { NewUserI } from "../models/task.model";
+import { LoginUserI, NewUserI } from "../models/task.model";
 
 export class UtilTask {
   static arePasswordsValidated = (password: string, confirm: string) => {
@@ -21,4 +21,13 @@ export class UtilTask {
     }
     return true;
   };
+
+  static isFieldsLoginValid = (user: LoginUserI): boolean => {
+
+    if (user.email.trim() === "" || user.password.trim() === "") {
+      return false;
+    }
+
+    return true;
+  }
 }

@@ -13,16 +13,33 @@ import {
 const AuthReducer: Reducer<ContextAuthI, ReducerAction> = (state, action) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      localStorage.setItem("token", action.payload.token);
-      return { ...state, authenticated: true, alert: null };
     case LOGIN_SUCCESS:
-      return { ...state, alert: action.payload };
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        authenticated: true,
+        alert: null,
+        loading: false,
+      };
+    case LOGOUT:
     case LOGIN_ERROR:
     case REGISTER_ERROR:
       localStorage.removeItem("token");
-      return { ...state, token: null, alert: action.payload };
+      return {
+        ...state,
+        token: null,
+        alert: null,
+        user: null,
+        authenticated: null,
+        loading: false,
+      };
     case GET_USER:
-      return { ...state, user: action.payload };
+      return {
+        ...state,
+        user: action.payload,
+        authenticated: true,
+        loading: false,
+      };
     default:
       return state;
   }

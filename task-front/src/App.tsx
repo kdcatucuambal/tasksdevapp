@@ -7,18 +7,34 @@ import ProjectState from "./context/projects/projectState";
 import TaskState from "./context/tasks/taskState";
 import AlertState from "./context/alerts/alertState";
 import AuthState from "./context/authentication/authState";
+import tokenAuth from "./config/token.config";
+import PrivateRoute from "./components/routes/PrivateRoute";
+import LoginRoute from "./components/routes/LoginRoute";
+//check token
+const token = localStorage.getItem("token");
+if (token) {
+  tokenAuth(token);
+}
 
 function App() {
   return (
     <ProjectState>
       <TaskState>
         <AlertState>
-          <AuthState>
+          <AuthState value={null}>
             <Router>
               <Switch>
                 <Route exact path="/" component={Login}></Route>
-                <Route exact path="/new-account" component={NewAccount}></Route>
-                <Route exact path="/projects" component={Projects}></Route>
+                <LoginRoute
+                  exact
+                  path="/new-account"
+                  component={NewAccount}
+                ></LoginRoute>
+                <PrivateRoute
+                  exact
+                  path="/projects"
+                  component={Projects}
+                ></PrivateRoute>
               </Switch>
             </Router>
           </AuthState>

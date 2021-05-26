@@ -28,7 +28,7 @@ const TaskList = () => {
         ) : (
           <TransitionGroup>
             {projectTasks.map((task) => (
-              <CSSTransition key={task.id} timeout={200} classNames="tarea">
+              <CSSTransition key={task._id} timeout={200} classNames="tarea">
                 <Task task={task}></Task>
               </CSSTransition>
             ))}
@@ -38,7 +38,12 @@ const TaskList = () => {
       <button
         type="button"
         className="btn btn-eliminar"
-        onClick={() => deleteProjectFn(project.id)}
+        onClick={() => {
+          const res = window.confirm("Are you sure to delete the project?");
+          if (res) {
+            deleteProjectFn(project._id);
+          }
+        }}
       >
         Delete project
       </button>

@@ -1,13 +1,14 @@
-import { NewUserI, ProjectI, TaskI } from "./task.model";
+import { LoginUserI, NewUserI, ProjectI, TaskI, TaskNewI } from "./task.model";
 
 export interface ContextProjectI {
   form: boolean;
   errorForm: boolean;
   projects: ProjectI[];
   project: ProjectI | null;
+  alert: { message: string, category: string };
   showFormFn(): void;
   getProjectsFn(): void;
-  addProjectFn(project: ProjectI): void;
+  addProjectFn(project: { name: string }): void;
   showErrorFn(): void;
   currentProjectFn(projectId: string): void;
   deleteProjectFn(projectId: string): void;
@@ -19,7 +20,7 @@ export interface ContextTaskI {
   errorTask: boolean;
   taskSelected: TaskI;
   getTaskByProjectFn(id: string): void;
-  addNewTaskFn(task: TaskI): void;
+  addNewTaskFn(task: TaskNewI): void;
   showErrorTaskFn(): void;
   deleteTaskFn(taskId: string): void;
   changeTaskStateFn(task: TaskI): void;
@@ -38,7 +39,12 @@ export interface ContextAuthI {
   authenticated: boolean,
   user: any,
   alert: { message: string, category: string },
-  registerUser(newUser: NewUserI): void
+  loading: boolean,
+  registerUserFn(newUser: NewUserI): void,
+  loginUserFn(user: LoginUserI): void
+  userLoggedFn(): void;
+  logoutFn(): void,
+
 }
 
 export interface PropsInitState {

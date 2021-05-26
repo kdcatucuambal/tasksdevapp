@@ -8,8 +8,8 @@ import { TaskModule } from './models/task/task.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [MongooseModule.forRoot(URLDB),
-    ProjectModule,
+  imports: [MongooseModule.forRoot(URLDB, { useCreateIndex: true }),
+    // ProjectModule,
     TaskModule,
     AuthModule,
   ],

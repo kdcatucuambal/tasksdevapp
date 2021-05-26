@@ -1,5 +1,6 @@
 import { Reducer } from "react";
 import { ContextProjectI, ReducerAction } from "../../models/task.context";
+import { ProjectI } from "../../models/task.model";
 import {
   PROJECT_FORM,
   GET_PROJECTS,
@@ -7,6 +8,7 @@ import {
   VALIDATE_FORM,
   CURRENT_PROJECT,
   DELETE_PROJECT,
+  ERROR_PROJECT,
 } from "./../../types";
 
 const ProjectReducer: Reducer<ContextProjectI, ReducerAction> = (
@@ -37,20 +39,29 @@ const ProjectReducer: Reducer<ContextProjectI, ReducerAction> = (
         errorForm: true,
       };
     case CURRENT_PROJECT:
+      if (action.payload === null) {
+        return {
+          ...state,
+          project: null,
+          
+        };
+      }
       return {
         ...state,
         project: state.projects.find(
-          (project: any) => project.id === action.payload
+          (project: ProjectI) => project._id === action.payload
         ),
       };
     case DELETE_PROJECT:
       return {
         ...state,
         projects: state.projects.filter(
-          (project: any) => project.id !== action.payload
+          (project: ProjectI) => project._id !== action.payload
         ),
         project: null,
       };
+    case ERROR_PROJECT:
+      return { ...state, alert: action.payload };
     default:
       return state;
   }

@@ -1,6 +1,7 @@
 import { useReducer } from "react";
+import axiosCustomer from "../../config/axios.config";
 import { ContextTaskI } from "../../models/task.context";
-import { TaskI } from "../../models/task.model";
+import { TaskI, TaskNewI } from "../../models/task.model";
 import {
   PROJECT_TASKS,
   ADD_TASK,
@@ -15,26 +16,7 @@ import TaskReducer from "./../../context/tasks/taskReducer";
 
 const TaskState = (props: any) => {
   const initalState: ContextTaskI = {
-    tasks: [
-      { id: "T1", name: "Select platform", state: false, projectId: "P001" },
-      { id: "T2", name: "Deploy test", state: true, projectId: "P001" },
-      { id: "T3", name: "Check database", state: true, projectId: "P003" },
-      { id: "T4", name: "Select hosting", state: false, projectId: "P002" },
-      { id: "T5", name: "Select Web App", state: false, projectId: "P001" },
-      {
-        id: "T6",
-        name: "Deploy Server Testing",
-        state: true,
-        projectId: "P001",
-      },
-      { id: "T7", name: "Create Database", state: true, projectId: "P003" },
-      {
-        id: "T8",
-        name: "Learn new technologies",
-        state: false,
-        projectId: "P002",
-      },
-    ],
+    tasks: [],
     projectTasks: [],
     errorTask: false,
     taskSelected: null,
@@ -52,13 +34,31 @@ const TaskState = (props: any) => {
   //Functions
 
   //Get project tasks
-  const getTaskByProjectFn = (id: string) => {
-    dispatch({ type: PROJECT_TASKS, payload: id });
+  const getTaskByProjectFn = async (id: string) => {
+    if (id === null) {
+      dispatch({ type: PROJECT_TASKS, payload: [] });
+      return;
+    }
+
+    try {
+      const response = await axiosCustomer.get(`/tasks/${id}`);
+      const tasks: TaskI[] = response.data;
+
+      dispatch({ type: PROJECT_TASKS, payload: tasks });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //Add new task
-  const addNewTaskFn = (task: TaskI) => {
-    dispatch({ type: ADD_TASK, payload: task });
+  const addNewTaskFn = async (taskNew: TaskNewI) => {
+    try {
+      const response = await axiosCustomer.post("/tasks", taskNew);
+      const task: TaskI = response.data;
+      dispatch({ type: ADD_TASK, payload: task });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //Validate task form
@@ -69,23 +69,47 @@ const TaskState = (props: any) => {
   };
 
   //Delete task
-  const deleteTaskFn = (taskId: string) => {
-    dispatch({
-      type: DELETE_TASK,
-      payload: taskId,
-    });
+  const deleteTaskFn = async (taskId: string) => {
+    try {
+      const response = await axiosCustomer.delete(`/tasks/${taskId}`);
+      const { deleted }: { deleted: number } = response.data;
+      if (deleted !== 0) {
+        dispatch({
+          type: DELETE_TASK,
+          payload: taskId,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //Change task state
-  const changeTaskStateFn = (task: TaskI) => {
-    dispatch({
-      type: STATE_TASK,
-      payload: task,
-    });
+  const changeTaskStateFn = async (task: TaskI) => {
+    try {
+      const response = await axiosCustomer.patch(`/tasks/${task._id}`, {
+        state: task.state,
+      });
+      const taskEdited = response.data;
+      dispatch({
+        type: STATE_TASK,
+        payload: taskEdited,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //Extract task for edit
   const selectTaskFn = (task: TaskI) => {
+    if (task === null) {
+      dispatch({
+        type: CURRENT_TASK,
+        payload: null,
+      });
+      return;
+    }
+
     dispatch({
       type: CURRENT_TASK,
       payload: task,
@@ -93,11 +117,20 @@ const TaskState = (props: any) => {
   };
 
   //Edit task
-  const updateTaskFn = (task: TaskI) => {
-    dispatch({
-      type: UPDATE_TASK,
-      payload: task,
-    });
+  const updateTaskFn = async (task: TaskI) => {
+    try {
+      const response = await axiosCustomer.put(`/tasks/${task._id}`, {
+        name: task.name,
+      });
+      const taskEdited = response.data;
+
+      dispatch({
+        type: UPDATE_TASK,
+        payload: taskEdited,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -1,8 +1,6 @@
 import NewProject from "./../projects/NewProject";
 import ProjectList from "./../projects/ProjectList";
 const Sidebar = () => {
- 
-
   return (
     <aside>
       <h1>

@@ -10,10 +10,10 @@ const Task = ({ task }: Props) => {
     useContext(taskContext);
 
   const handleDeleteTask = (taskId: string) => {
-    const res = window.confirm("Are you sure delete?");
+    const res = window.confirm("Are you sure to delete the task?");
     if (res) {
       deleteTaskFn(taskId);
-      getTaskByProjectFn(task.projectId);
+      getTaskByProjectFn(task.project);
     }
   };
 
@@ -62,7 +62,7 @@ const Task = ({ task }: Props) => {
           Edit
         </button>
         <button
-          onClick={() => handleDeleteTask(task.id)}
+          onClick={() => handleDeleteTask(task._id)}
           type="button"
           className="btn btn-secundario"
         >

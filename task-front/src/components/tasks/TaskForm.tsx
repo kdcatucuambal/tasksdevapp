@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { generate } from "short-uuid";
 import projectContext from "../../context/projects/projectContext";
 import taskContext from "../../context/tasks/taskContext";
 
@@ -15,7 +14,6 @@ const TaskForm = () => {
     errorTask,
     getTaskByProjectFn,
     taskSelected,
-    selectTaskFn,
     updateTaskFn,
   } = useContext(taskContext);
 
@@ -49,21 +47,19 @@ const TaskForm = () => {
 
     //Edit or New
     if (taskSelected === null) {
-      //Add task state
       addNewTaskFn({
-        id: generate(),
         name: taskName,
-        state: false,
-        projectId: project.id,
+        project: project._id,
       });
     } else {
       //Update task
+
       updateTaskFn({ ...taskSelected, name: taskName });
     }
 
     //Reset form
     setTaskName("");
-    getTaskByProjectFn(project.id);
+    getTaskByProjectFn(project._id);
   };
 
   return (

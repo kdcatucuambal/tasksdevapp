@@ -8,24 +8,20 @@ import {
   VALIDATE_FORM,
   CURRENT_PROJECT,
   DELETE_PROJECT,
+  ERROR_PROJECT,
 } from "./../../types";
 import { ProjectI } from "../../models/task.model";
-import { generate } from "short-uuid";
-import { ContextProjectI, PropsInitState } from "../../models/task.context";
+import { ContextProjectI } from "../../models/task.context";
+import axiosCustomer from "../../config/axios.config";
 
 //UPPERCASSE
 const ProjectState = (props: any) => {
-  const projects = [
-    { id: "P001", name: "Virtual Store" },
-    { id: "P002", name: "Web Design" },
-    { id: "P003", name: "Homework" },
-  ];
-
   const initialState: ContextProjectI = {
     form: false,
     projects: [],
     project: null,
     errorForm: false,
+    alert: null,
     addProjectFn: () => {},
     currentProjectFn: () => {},
     deleteProjectFn: () => {},
@@ -45,20 +41,45 @@ const ProjectState = (props: any) => {
   };
 
   //Get projects
-  const getProjectsFn = () => {
+  const getProjectsFn = async () => {
     console.log("Function get projects");
 
-    dispatch({ type: GET_PROJECTS, payload: projects });
+    try {
+      const response = await axiosCustomer.get("/projects");
+      const projects: ProjectI[] = response.data;
+      dispatch({
+        type: GET_PROJECTS,
+        payload: projects,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR_PROJECT,
+        payload: {
+          message: "There is an error",
+          category: "alerta-error",
+        },
+      });
+    }
   };
 
   //Add new project
-  const addProjectFn = (project: ProjectI) => {
-    project.id = generate();
-    //Insert project in the state
-    dispatch({
-      type: ADD_PROJECT,
-      payload: project,
-    });
+  const addProjectFn = async (project: ProjectI) => {
+    try {
+      const response = await axiosCustomer.post("/projects", project);
+
+      dispatch({
+        type: ADD_PROJECT,
+        payload: response.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR_PROJECT,
+        payload: {
+          message: "There is an error",
+          category: "alerta-error",
+        },
+      });
+    }
   };
   //Show error if project field is blank
   const showErrorFn = () => {
@@ -69,6 +90,13 @@ const ProjectState = (props: any) => {
 
   //Select project that user clicked on
   const currentProject = (projectId: string) => {
+    if (projectId === null) {
+      dispatch({
+        type: CURRENT_PROJECT,
+        payload: null,
+      });
+      return;
+    }
     dispatch({
       type: CURRENT_PROJECT,
       payload: projectId,
@@ -76,11 +104,25 @@ const ProjectState = (props: any) => {
   };
 
   //Delete a project when user do click
-  const deleteProjectFn = (projectId: string) => {
-    dispatch({
-      type: DELETE_PROJECT,
-      payload: projectId,
-    });
+  const deleteProjectFn = async (projectId: string) => {
+    try {
+      const response = await axiosCustomer.delete(`/projects/${projectId}`);
+      const { deleted }: { deleted: number } = response.data;
+      if (deleted !== 0) {
+        dispatch({
+          type: DELETE_PROJECT,
+          payload: projectId,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: ERROR_PROJECT,
+        payload: {
+          message: "There is an error",
+          category: "alerta-error",
+        },
+      });
+    }
   };
 
   return (
@@ -90,6 +132,7 @@ const ProjectState = (props: any) => {
         projects: state.projects,
         errorForm: state.errorForm,
         project: state.project,
+        alert: state.alert,
         getProjectsFn,
         addProjectFn,
         showErrorFn,

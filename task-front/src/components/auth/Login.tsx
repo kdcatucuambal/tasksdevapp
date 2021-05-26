@@ -1,8 +1,32 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginUserI } from "../../models/task.model";
-import { Link } from "react-router-dom";
+import { Link, RouterProps } from "react-router-dom";
+import AlertContext from "../../context/alerts/alertContext";
+import AuthContext from "../../context/authentication/authContext";
+import { UtilTask } from "../../util/util.task";
 
-const Login = () => {
+
+const Login = (props: RouterProps) => {
+  //extract context values for alerts
+  const { alert, showAlert } = useContext(AlertContext);
+
+  const { alert: alertR, authenticated, loginUserFn } = useContext(AuthContext);
+
+
+  //Usse efect
+  useEffect(() => {
+
+    if (authenticated) {
+
+      props.history.push("/projects");
+    }
+
+    if (alertR) {
+      showAlert(alertR.message, alertR.category);
+    }
+    // eslint-disable-next-line
+  }, [alertR, authenticated, props.history]);
+
   //state login
   const [user, setUser] = useState<LoginUserI>({ email: "", password: "" });
 
@@ -12,11 +36,20 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(user);
+
+    if (!UtilTask.isFieldsLoginValid(user)) {
+      showAlert("User and password are required", "alerta-error");
+      return;
+    }
+
+    loginUserFn(user);
   };
 
   return (
     <div className="form-usuario">
+      {alert ? (
+        <div className={`alerta ${alert.category}`}>{alert.message}</div>
+      ) : null}
       <div className="contenedor-form sombra-dark">
         <h1>Sign In</h1>
         <form onSubmit={handleSubmit}>
@@ -52,6 +85,7 @@ const Login = () => {
         </form>
         <Link to="/new-account" className="enlace-cuenta">
           Sign Up!
+          {console.log("Render login")}
         </Link>
       </div>
     </div>

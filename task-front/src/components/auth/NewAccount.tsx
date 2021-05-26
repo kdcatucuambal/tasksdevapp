@@ -1,32 +1,33 @@
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, RouterProps } from "react-router-dom";
 import { NewUserI } from "../../models/task.model";
 import { UtilTask } from "../../util/util.task";
 import AlertContext from "../../context/alerts/alertContext";
 import AuthContext from "../../context/authentication/authContext";
-import authContext from "../../context/authentication/authContext";
 
-const NewAccount = (props) => {
-  //extraxt context values
+const NewAccount = (props: RouterProps) => {
+  //extract context values for alerts
   const { alert, showAlert } = useContext(AlertContext);
 
   const {
     alert: alertR,
     authenticated,
-    registerUser,
+    registerUserFn,
   } = useContext(AuthContext);
-  //User registered
+
+  //Usse efect
   useEffect(() => {
+    console.log("Use effect new account");
+
     if (authenticated) {
       props.history.push("/projects");
     }
 
     if (alertR) {
-      showAlert(alertR.message, alert.category);
+      showAlert(alertR.message, alertR.category);
     }
-
-    
+    // eslint-disable-next-line
   }, [alertR, authenticated, props.history]);
 
   const [newUser, setNewUser] = useState<NewUserI>({
@@ -56,7 +57,7 @@ const NewAccount = (props) => {
     }
 
     //Pass to action
-    registerUser(newUser);
+    registerUserFn(newUser);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
