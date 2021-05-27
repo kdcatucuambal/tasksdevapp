@@ -4,7 +4,6 @@ import AuthContext from "../../context/authentication/authContext";
 
 const PrivateRoute = ({ component: Component, ...props }) => {
   const { authenticated, userLoggedFn, loading } = useContext(AuthContext);
-  console.log(props);
 
   useEffect(() => {
     userLoggedFn();

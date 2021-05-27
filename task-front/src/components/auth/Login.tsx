@@ -5,19 +5,15 @@ import AlertContext from "../../context/alerts/alertContext";
 import AuthContext from "../../context/authentication/authContext";
 import { UtilTask } from "../../util/util.task";
 
-
 const Login = (props: RouterProps) => {
   //extract context values for alerts
   const { alert, showAlert } = useContext(AlertContext);
 
   const { alert: alertR, authenticated, loginUserFn } = useContext(AuthContext);
 
-
   //Usse efect
   useEffect(() => {
-
     if (authenticated) {
-
       props.history.push("/projects");
     }
 
@@ -51,7 +47,7 @@ const Login = (props: RouterProps) => {
         <div className={`alerta ${alert.category}`}>{alert.message}</div>
       ) : null}
       <div className="contenedor-form sombra-dark">
-        <h1>Sign In</h1>
+        <h1>SIGN ING DEVTASKS</h1>
         <form onSubmit={handleSubmit}>
           <div className="campo-form">
             <label htmlFor="email">Email</label>
@@ -85,7 +81,6 @@ const Login = (props: RouterProps) => {
         </form>
         <Link to="/new-account" className="enlace-cuenta">
           Sign Up!
-          {console.log("Render login")}
         </Link>
       </div>
     </div>

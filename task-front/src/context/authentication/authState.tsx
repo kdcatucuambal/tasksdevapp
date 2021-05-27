@@ -59,10 +59,14 @@ const AuthState = (props: ProviderProps<any>) => {
     const token = localStorage.getItem("token");
     if (token) {
       tokenAuth(token);
+    } else {
+      dispatch({
+        type: LOGIN_ERROR,
+      });
+      return;
     }
     try {
       const response = await axiosCustomer.get("/users/logged");
-
       dispatch({
         type: GET_USER,
         payload: response.data,
@@ -101,7 +105,6 @@ const AuthState = (props: ProviderProps<any>) => {
     dispatch({
       type: LOGOUT,
     });
-    
   };
 
   return (

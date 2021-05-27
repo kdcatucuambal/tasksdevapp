@@ -28,7 +28,7 @@ const AuthReducer: Reducer<ContextAuthI, ReducerAction> = (state, action) => {
       return {
         ...state,
         token: null,
-        alert: null,
+        alert: action.payload,
         user: null,
         authenticated: null,
         loading: false,

@@ -18,8 +18,6 @@ const NewAccount = (props: RouterProps) => {
 
   //Usse efect
   useEffect(() => {
-    console.log("Use effect new account");
-
     if (authenticated) {
       props.history.push("/projects");
     }

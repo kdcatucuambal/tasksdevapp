@@ -4,7 +4,7 @@ const Sidebar = () => {
   return (
     <aside>
       <h1>
-        MERN<span>Tasks</span>
+        DEV<span>Tasks</span>
         <NewProject />
       </h1>
       <div className="proyectos">

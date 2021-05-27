@@ -42,7 +42,10 @@ const ProjectState = (props: any) => {
 
   //Get projects
   const getProjectsFn = async () => {
-    console.log("Function get projects");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
 
     try {
       const response = await axiosCustomer.get("/projects");
@@ -55,7 +58,7 @@ const ProjectState = (props: any) => {
       dispatch({
         type: ERROR_PROJECT,
         payload: {
-          message: "There is an error",
+          message: "There is an error in projects",
           category: "alerta-error",
         },
       });
@@ -75,7 +78,7 @@ const ProjectState = (props: any) => {
       dispatch({
         type: ERROR_PROJECT,
         payload: {
-          message: "There is an error",
+          message: "There is an error add",
           category: "alerta-error",
         },
       });

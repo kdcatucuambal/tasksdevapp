@@ -9,13 +9,12 @@ const LoginRoute = ({ component: Component, ...props }) => {
     userLoggedFn();
     // eslint-disable-next-line
   }, []);
-  console.log("AUTHT: ", authenticated);
 
   return (
     <Route
       {...props}
       render={(props) =>
-        authenticated ? (
+        authenticated && loading ? (
           <Redirect to="/projects"></Redirect>
         ) : (
           <Component {...props}></Component>

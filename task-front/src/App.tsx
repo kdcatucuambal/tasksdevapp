@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Projects from "./components/projects/Projects";
 import Login from "./components/auth/Login";
 import NewAccount from "./components/auth/NewAccount";
@@ -24,7 +24,7 @@ function App() {
           <AuthState value={null}>
             <Router>
               <Switch>
-                <Route exact path="/" component={Login}></Route>
+                <LoginRoute exact path="/" component={Login}></LoginRoute>
                 <LoginRoute
                   exact
                   path="/new-account"
